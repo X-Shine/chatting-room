@@ -1,21 +1,5 @@
-/*
- * 注册模块
- * 登录模块
- * 管理（创建，删除，查询）聊天室
- * 加入，退出，查询聊天室
- * 有人数限制，能看到其它人的对话
- * */
-
-/*
- * command start by 'cr'
- * cr login name passwd
- * cr logout
- * cr list
- * cr join room
- * cr exit
- * cr add room
- * cr delete room
- * */
+#ifndef SERVER_HPP_
+#define SERVER_HPP_
 
 #include <algorithm>
 #include <iostream>
@@ -32,51 +16,9 @@
 #include <cstring>
 #include <sstream>
 #include <cassert>
-using namespace std;
+#include "common.hpp"
+#include "room.hpp"
 
-auto startsWith = [] (const string& str,const string& head) {
-    if(str.size() < head.size())
-        return false;
-
-    if(!strncmp(str.c_str(),head.c_str(),head.size()))
-        return true;
-    else
-        return false;
-};
-
-class ChattingRoom {
-public:
-//    ChattingRoom() {}
-    ChattingRoom(const string& name) : name_(name) {}
-    void broadcast(const string& msg) {
-        for_each(users_.begin(),users_.end(),[&msg] (const pair<int,string>& item) {
-            send(item.first,msg.c_str(),msg.size(),0);
-        });
-    }
-    void addUser(int fd,const string& username) {
-        users_.insert(make_pair(fd,username));
-    }
-    void removeUser(int fd) {
-        if(users_.find(fd) == users_.end()) {
-            return;
-        }
-
-        users_.erase(fd);
-    }
-
-    string getName() const { return name_; }
-private:
-    map<int,string> users_;
-    string name_;
-};
-
-
-struct User {
-    bool is_admin_;
-    string name_;
-    string password_;
-    ChattingRoom* room_;
-};
 
 class ChattingServer {
 public:
@@ -111,7 +53,7 @@ public:
                     int ret = read(i,buffer.data(),1024);
                     const string content(buffer.data(),ret);
                     cout << content << endl;
-                    if(startsWith(content,"cr")) {
+                    if(Tool::startsWith(content,"cr")) {
                         parseCmd(i,content);
                     } else {
                         // non login user can not send content expect command
@@ -248,9 +190,4 @@ private:
     fd_set read_fds_;
     int fd_max_;
 };
-
-int main() {
-    ChattingServer server(54321);
-    server.start();
-    return 0;
-}
+#endif // SERVER_HPP_

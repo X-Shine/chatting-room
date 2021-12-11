@@ -3,4 +3,4 @@ project(chatting_room)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(chatting_room server.cpp)
+add_executable(chatting_room main.cpp)
