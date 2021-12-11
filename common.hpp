@@ -1,3 +1,6 @@
+#ifndef COMMON_HPP_
+#define COMMON_HPP_
+
 #include <string>
 #include <cstring>
 
@@ -13,3 +16,5 @@ namespace Tool {
             return false;
     };
 }
+
+#endif // COMMON_HPP_

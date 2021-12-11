@@ -6,6 +6,9 @@ A simple chatting room implementation in socket.You can use telnet to connect to
 Just connect to the server in `telent` command from terminal,then apply commands below.
 
 ## Commands
+`cr register <username> <password>`  
+register new user
+
 `cr login <username> <password>`  
 login to the server.  
 
